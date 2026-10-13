@@ -60,7 +60,7 @@ def import_data(pth):
             pth: a path to the csv
     output:
             df: pandas dataframe
-            RESPONSE 1 is 1 for cancelled customers, 0 for active customers
+            RESPONSE is 1 for cancelled customers, 0 for active customers
     """
     df = pd.read_csv(pth)
     df[RESPONSE] = (df['Attrition_Flag'] == "Attrited Customer").astype(int)
@@ -116,17 +116,22 @@ def perform_eda(df):
 
 def encoder_helper(df, category_lst, response):
     """
-    Encode categorical features.
+    Turn each categorical column into a new column holding the mean response
+    (the cancellation rate) for that column's category.
 
     input:
             df: pandas dataframe
-            category_lst: list of categorical columns
-            response: response column name
+            category_lst: list of columns that contain categorical features
+            response: string of response name
     output:
-            df: updated dataframe
+            df: copy of the dataframe with a new <category>_<response> column for
+                each column in category_lst
     """
-    # TODO: implement
-    pass
+    df = df.copy()
+    for category in category_lst:
+        category_means = df.groupby(category)[response].mean()
+        df[f"{category}_{response}"] = df[category].map(category_means)
+    return df
 
 
 def perform_feature_engineering(df, response):
