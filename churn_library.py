@@ -1,23 +1,12 @@
-# TODO:
-# Add a module-level docstring describing:
-# - Purpose of this file
-# - Author
-# - Date created
+""" 
+Library of functions to predict credi card customers who are most likely to churn.
+
+Author: Sharina V. Jones
+Date: October 2026
+"""
 
 import os
-
-
-
-# TODO: add required imports
-# Example:
-# import joblib
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# from sklearn.model_selection import train_test_split
-# from sklearn.metrics import classification_report, RocCurveDisplay
-# from sklearn.linear_model import LogisticRegression
-# from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
 
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
@@ -25,6 +14,20 @@ EDA_DIR = "./images/eda"
 RESULTS_DIR = "./images/results"
 MODELS_DIR = "./models"
 DATA_PATH = "./data/bank_data.csv"
+
+def main():
+    """
+    Run the churn pipeline end to end.
+
+    input:
+        None
+
+    output:
+        None
+    """
+    create_output_directories()
+    df = import_data(DATA_PATH)
+    print(df.shape)
 
 
 def create_output_directories():
@@ -50,11 +53,7 @@ def import_data(pth):
     output:
             df: pandas dataframe
     """
-    # TODO: implement
-    # Hint:
-    # df = pd.read_csv(pth)
-    # return df
-    pass
+    return pd.read_csv(pth)
 
 
 def perform_eda(df):
@@ -157,20 +156,5 @@ def train_models(x_train, x_test, y_train, y_test):
 
 
 if __name__ == "__main__":
-    create_output_directories()
+    main()
 
-    df = import_data(DATA_PATH)
-
-    perform_eda(df)
-
-    category_columns = [
-        "Gender",
-        "Education_Level",
-        "Marital_Status",
-        "Income_Category",
-        "Card_Category",
-    ]
-
-    df = encoder_helper(df, category_columns, "Churn")
-    x_train, x_test, y_train, y_test = perform_feature_engineering(df, "Churn")
-    train_models(x_train, x_test, y_train, y_test)
