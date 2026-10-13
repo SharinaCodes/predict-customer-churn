@@ -6,7 +6,7 @@
 
 import os
 
-os.environ["QT_QPA_PLATFORM"] = "offscreen"
+
 
 # TODO: add required imports
 # Example:
@@ -18,6 +18,8 @@ os.environ["QT_QPA_PLATFORM"] = "offscreen"
 # from sklearn.metrics import classification_report, RocCurveDisplay
 # from sklearn.linear_model import LogisticRegression
 # from sklearn.ensemble import RandomForestClassifier
+
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 EDA_DIR = "./images/eda"
 RESULTS_DIR = "./images/results"
