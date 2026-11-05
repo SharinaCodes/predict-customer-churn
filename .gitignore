@@ -1,0 +1,16 @@
+# Python bytecode and caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+.venv
+venv/
+
+# Notebook checkpoints and OS clutter
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
