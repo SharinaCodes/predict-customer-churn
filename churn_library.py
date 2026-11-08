@@ -7,15 +7,26 @@ Date: November 2026
 
 import os
 
+import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
+sns.set_theme()
 
 EDA_DIR = "./images/eda"
 RESULTS_DIR = "./images/results"
 MODELS_DIR = "./models"
 DATA_PATH = "./data/bank_data.csv"
 RESPONSE = "Churn"
+
+
+def save_figure(pth):
+    """
+    Save and close the current figure.
+    """
+    plt.savefig(pth, bbox_inches="tight")
+    plt.close()
 
 
 def create_output_directories():
@@ -51,18 +62,36 @@ def perform_eda(df):
     Perform EDA on df and save figures.
 
     input:
-            df: pandas dataframe
+            df: pandas dataframe that includes the RESPONSE column
     output:
             None
     """
     create_output_directories()
 
-    # TODO: implement
-    # Suggested steps:
-    # 1. Plot key distributions
-    # 2. Plot a correlation heatmap
-    # 3. Save figures into EDA_DIR
-    pass
+    plt.figure(figsize=(20, 10))
+    df[RESPONSE].hist()
+    save_figure(os.path.join(EDA_DIR, "churn_dist.png"))
+
+    plt.figure(figsize=(20, 10))
+    df['Customer_Age'].hist()
+    save_figure(os.path.join(EDA_DIR, "cust_age_dist.png"))
+
+    plt.figure(figsize=(20, 10))
+    df.Marital_Status.value_counts(normalize=True).plot(kind='bar')
+    save_figure(os.path.join(EDA_DIR, "marital_status_dist.png"))
+
+    plt.figure(figsize=(20, 10))
+    sns.histplot(df['Total_Trans_Ct'], stat='density', kde=True)
+    save_figure(os.path.join(EDA_DIR, "total_trans_ct_dist.png"))
+
+    plt.figure(figsize=(20, 10))
+    numeric_df = df.drop(
+        columns=[
+            "Unnamed: 0",
+            "CLIENTNUM"]).select_dtypes(
+        include="number")
+    sns.heatmap(numeric_df.corr(), annot=False, cmap='Dark2_r', linewidths=2)
+    save_figure(os.path.join(EDA_DIR, "heatmap.png"))
 
 
 def encoder_helper(df, category_lst, response):
@@ -156,6 +185,7 @@ def main():
     create_output_directories()
     df = import_data(DATA_PATH)
     perform_eda(df)
+
 
 if __name__ == "__main__":
     main()
