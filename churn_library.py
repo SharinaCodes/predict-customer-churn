@@ -1,28 +1,21 @@
-# TODO:
-# Add a module-level docstring describing:
-# - Purpose of this file
-# - Author
-# - Date created
+"""
+Library of functions to predict credit card churn.
+
+Author: Sharina V. Jones
+Date: November 2026
+"""
 
 import os
 
-os.environ["QT_QPA_PLATFORM"] = "offscreen"
+import pandas as pd
 
-# TODO: add required imports
-# Example:
-# import joblib
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# from sklearn.model_selection import train_test_split
-# from sklearn.metrics import classification_report, RocCurveDisplay
-# from sklearn.linear_model import LogisticRegression
-# from sklearn.ensemble import RandomForestClassifier
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 EDA_DIR = "./images/eda"
 RESULTS_DIR = "./images/results"
 MODELS_DIR = "./models"
 DATA_PATH = "./data/bank_data.csv"
+RESPONSE = "Churn"
 
 
 def create_output_directories():
@@ -41,18 +34,16 @@ def create_output_directories():
 
 def import_data(pth):
     """
-    Return a dataframe for the csv found at pth.
+    Return a dataframe for the csv found at pth, with the response column added.
 
     input:
             pth: a path to the csv
     output:
-            df: pandas dataframe
+            df: pandas dataframe; RESPONSE is 1 for churned customers, 0 for subscribed
     """
-    # TODO: implement
-    # Hint:
-    # df = pd.read_csv(pth)
-    # return df
-    pass
+    df = pd.read_csv(pth)
+    df[RESPONSE] = (df['Attrition_Flag'] == "Attrited Customer").astype(int)
+    return df
 
 
 def perform_eda(df):
@@ -68,10 +59,9 @@ def perform_eda(df):
 
     # TODO: implement
     # Suggested steps:
-    # 1. Create a binary churn column if needed
-    # 2. Plot key distributions
-    # 3. Plot a correlation heatmap
-    # 4. Save figures into EDA_DIR
+    # 1. Plot key distributions
+    # 2. Plot a correlation heatmap
+    # 3. Save figures into EDA_DIR
     pass
 
 
@@ -154,21 +144,18 @@ def train_models(x_train, x_test, y_train, y_test):
     pass
 
 
-if __name__ == "__main__":
+def main():
+    """
+    Run the churn pipeline end to end.
+
+    input:
+        None
+    output:
+        None
+    """
     create_output_directories()
-
     df = import_data(DATA_PATH)
-
     perform_eda(df)
 
-    category_columns = [
-        "Gender",
-        "Education_Level",
-        "Marital_Status",
-        "Income_Category",
-        "Card_Category",
-    ]
-
-    df = encoder_helper(df, category_columns, "Churn")
-    x_train, x_test, y_train, y_test = perform_feature_engineering(df, "Churn")
-    train_models(x_train, x_test, y_train, y_test)
+if __name__ == "__main__":
+    main()
