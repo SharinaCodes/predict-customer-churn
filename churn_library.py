@@ -96,18 +96,20 @@ def perform_eda(df):
 
 def encoder_helper(df, category_lst, response):
     """
-    Encode categorical features.
+    Turn each categorical column into a new column holding the mean response (the churn rate) for that column's category.
 
     input:
             df: pandas dataframe
-            category_lst: list of categorical columns
-            response: response column name
+            category_lst: list of columns that contain categorical features
+            response: string of response name
     output:
             df: updated dataframe
     """
-    # TODO: implement
-    pass
-
+    df = df.copy()
+    for category in category_lst:
+        category_means = df.groupby(category)[response].mean()
+        df[f"{category}_{response}"] = df[category].map(category_means)
+    return df
 
 def perform_feature_engineering(df, response):
     """
